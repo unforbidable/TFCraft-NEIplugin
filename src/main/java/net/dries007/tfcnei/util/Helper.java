@@ -37,6 +37,7 @@
 package net.dries007.tfcnei.util;
 
 import cpw.mods.fml.relauncher.ReflectionHelper;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -46,6 +47,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
@@ -144,4 +146,17 @@ public class Helper
     {
         return input == target || OreDictionary.itemMatches(target, input, false);
     }
+
+    public static boolean isFluidEqual(FluidStack fluidStack, ItemStack itemStack) {
+        // Try to reconstruct fluid stack from sponge block
+        if (Block.getBlockFromItem(itemStack.getItem()) == Blocks.sponge && itemStack.hasTagCompound() && itemStack.getTagCompound().hasKey("FLUID")) {
+            String fluidName = itemStack.getTagCompound().getString("FLUID");
+            FluidStack other = FluidRegistry.getFluidStack(fluidName, itemStack.stackSize * FluidContainerRegistry.BUCKET_VOLUME);
+            return other != null && other.isFluidEqual(fluidStack);
+        }
+
+        // Try to match fluid with registered containers
+        return fluidStack.isFluidEqual(itemStack);
+    }
+
 }

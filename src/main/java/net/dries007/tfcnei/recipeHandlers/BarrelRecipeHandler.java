@@ -137,7 +137,7 @@ public class BarrelRecipeHandler extends TemplateRecipeHandler
             ItemStack outItem = recipe.getRecipeOutIS();
             FluidStack outFluid = recipe.getRecipeOutFluid();
 
-            if ((outItem != null && Helper.areItemStacksEqual(result, outItem)) || (outFluid != null && outFluid.isFluidEqual(result)))
+            if ((outItem != null && Helper.areItemStacksEqual(result, outItem)) || (outFluid != null && Helper.isFluidEqual(outFluid, result)))
             {
                 arecipes.add(new CachedBarrelRecipe(recipe));
             }
@@ -147,13 +147,12 @@ public class BarrelRecipeHandler extends TemplateRecipeHandler
     @Override
     public void loadUsageRecipes(ItemStack ingredient)
     {
-        FluidStack fluidStack = getFluidForFilledItem(ingredient);
         for (BarrelRecipe recipe : recipeList)
         {
             ItemStack inItem = recipe.getInItem();
             FluidStack inFluid = recipe.getInFluid();
 
-            if ((inItem != null && Helper.areItemStacksEqual(inItem, ingredient)) || (inFluid != null && inFluid.isFluidEqual(fluidStack)))
+            if ((inItem != null && Helper.areItemStacksEqual(inItem, ingredient)) || (inFluid != null && Helper.isFluidEqual(inFluid, ingredient)))
             {
                 arecipes.add(new CachedBarrelRecipe(recipe));
             }
